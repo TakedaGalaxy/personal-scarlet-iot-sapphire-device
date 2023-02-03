@@ -25,7 +25,6 @@ namespace buzzer
       ledcWrite(CANAL, 0);
 
       vTaskDelete(buzzerTask);
-      return;
     }
   }
 

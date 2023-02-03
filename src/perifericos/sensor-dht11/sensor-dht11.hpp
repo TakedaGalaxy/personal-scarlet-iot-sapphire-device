@@ -5,10 +5,15 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-// DHT11
-#define DHT11_DATA_PIN 23
+#define DATA_PIN 23
 
 namespace sensorDht11
 {
+  void inicializa();
 
+  // Cria uma task para fazer a leitura dos dados do DHT11
+  void atualizaDados();
+
+  float getTemperatura();
+  float getUmidade();
 }

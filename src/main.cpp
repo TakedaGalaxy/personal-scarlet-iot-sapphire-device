@@ -5,7 +5,7 @@ void setup()
   Serial.begin(115200);
 
   display::inicializa();
-
+  sensorDht11::inicializa();
   buzzer::inicializa();
 
 }
@@ -13,8 +13,9 @@ void setup()
 void loop()
 {
 
-  buzzer::disparaBip();
-
-  delay(500);
+  //buzzer::disparaBip();
+  sensorDht11::atualizaDados();
+  Serial.printf("%.2f - %.2f\n",sensorDht11::getTemperatura(), sensorDht11::getUmidade());
+  //delay(500);
 
 }

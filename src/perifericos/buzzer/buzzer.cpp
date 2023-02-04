@@ -48,6 +48,7 @@ namespace buzzer
     // Canal para comunicação entre uma task e a taskBuzzer
     comandoQueuHandler = xQueueCreate(1, sizeof(Comando));
 
+    // Criar taks para ser processada no core 1
     xTaskCreatePinnedToCore(
         taskBip,
         "Buzzer",

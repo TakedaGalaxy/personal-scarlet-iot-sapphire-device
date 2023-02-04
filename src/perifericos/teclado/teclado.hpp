@@ -9,14 +9,6 @@
 
 #define QUANTIDADE 3
 
-typedef struct
-{
-  bool precionada;
-  bool statusLido;
-  bool callBackChamada;
-  bool erro;
-} StatusTecla;
-
 enum Teclas
 {
   T_ANTERIOR = 0, // TECLA_1_PIN
@@ -24,13 +16,28 @@ enum Teclas
   T_PROXIMO       // TECLA_3_PIN
 };
 
+typedef struct
+{
+  bool precionada;
+  bool statusLido;
+  bool callBackChamada;
+} StatusTecla;
+
+typedef struct
+{
+  Teclas tecla;
+  void (*p)(void);
+} SetCallback;
+
 namespace teclado
 {
+  // Inicializa pinos para leitura
+  // Inicia task para realizar a leitura
   void inicializa();
 
-  void atualizaStatus();
+  // Atualiza e retorna valor atual da tecla
+  StatusTecla getTecla(Teclas tecla);
 
-  StatusTecla getTeclaSatus(Teclas tecla);
-
-  void setCallback(Teclas tecla, void (*p)(void));
+  // Chamda callback quando tecla precionada
+  void setCallback(Teclas tecla, void (*callback)(void));
 }

@@ -53,6 +53,7 @@ namespace sensorDht11
 
     dadosQueueHandler = xQueueCreate(1, sizeof(DadosDht11));
 
+    // Criar taks para ser processada no core 1
     xTaskCreatePinnedToCore(
         taskDht11,
         "DHT11",

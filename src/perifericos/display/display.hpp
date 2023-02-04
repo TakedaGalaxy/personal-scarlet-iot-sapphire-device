@@ -4,7 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <freertos/FreeRTOS.h>
-#include <freertos/task.h> 
+#include <freertos/task.h>
 
 #define SDA_PIN 4
 #define SCL_PIN 15
@@ -12,7 +12,14 @@
 #define X_MAX 128
 #define Y_MAX 64
 
-namespace display{
+typedef struct
+{
+  float temperatura;
+  float umidade;
+} DadosBarraSuperior;
+
+namespace display
+{
   void inicializa();
-  void logica();
+  void setDadosBarraSuerior(float temperatura, float umidade);
 }

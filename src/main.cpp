@@ -21,8 +21,11 @@ void setup()
 void loop()
 {
 
+  DadosDht11 resDht11 = sensorDht11::getDados();
+  display::setDadosBarraSuerior(resDht11.temperatura, resDht11.umidade);
+
   StatusTecla resOK = teclado::getTecla(T_OK);
-  if (!resOK.statusLido && resOK.precionada )
+  if (!resOK.statusLido && resOK.precionada)
   {
     buzzer::emiteSom();
     Serial.println("Apenas uma vez !");
@@ -30,7 +33,6 @@ void loop()
 
   if (teclado::getTecla(T_PROXIMO).precionada)
   {
-    DadosDht11 resDht11 = sensorDht11::getDados();
     Serial.printf("%.2f - %.2f\n", resDht11.temperatura, resDht11.umidade);
   }
 }

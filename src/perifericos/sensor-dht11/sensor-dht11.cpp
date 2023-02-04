@@ -5,29 +5,43 @@ namespace sensorDht11
   namespace
   {
 
+    QueueHandle_t dadosQueueHandler;
+
     TaskHandle_t dht11TaskHandle;
+
+    DadosDht11 ultimoDadoRecebido = {0, 0, 0};
 
     DHT_Unified dht(DATA_PIN, DHT11);
 
-    float umidade = 0;
-    float temperatura = 0;
-
     void taskDht11(void *pvParameters)
     {
-      sensors_event_t event;
+      while (1)
+      {
 
-      dht.temperature().getEvent(&event);
-      if (!isnan(event.temperature))
-        temperatura = event.temperature;
+        DadosDht11 novoDado = {0, 0, 0};
 
-      dht.humidity().getEvent(&event);
-      if (!isnan(event.relative_humidity))
-        umidade = event.relative_humidity;
+        sensors_event_t event;
 
-      // Necessário delay entre as leituras, especificaod pelo datasheet
-      vTaskDelay(250);
+        dht.temperature().getEvent(&event);
+        if (!isnan(event.temperature))
+          novoDado.temperatura = event.temperature;
+        else
+          novoDado.erro = true;
 
-      vTaskDelete(dht11TaskHandle);
+        dht.humidity().getEvent(&event);
+        if (!isnan(event.relative_humidity))
+          novoDado.umidade = event.relative_humidity;
+        else
+          novoDado.erro = true;
+
+        if (xQueueSend(dadosQueueHandler, (void *)&novoDado, 0) != pdTRUE)
+        {
+          // Caso erro
+        }
+
+        // Necessário delay entre as leituras, especificaod pelo datasheet
+        vTaskDelay(250);
+      }
     }
 
   }
@@ -36,26 +50,22 @@ namespace sensorDht11
   {
     // Inicializando sensor de temperatura e umidade
     dht.begin();
+
+    dadosQueueHandler = xQueueCreate(1, sizeof(DadosDht11));
+
+    xTaskCreatePinnedToCore(
+        taskDht11,
+        "DHT11",
+        10000,
+        NULL,
+        1,
+        &dht11TaskHandle,
+        1);
   }
 
-  void atualizaDados()
+  DadosDht11 getDados()
   {
-    if (dht11TaskHandle == NULL || eTaskGetState(dht11TaskHandle) == 4)
-    {
-      // Criar taks para ser processada no core 0
-      xTaskCreatePinnedToCore(
-          taskDht11,
-          "DHT11",
-          10000,
-          NULL,
-          1,
-          &dht11TaskHandle,
-          0);
-    }
+    xQueueReceive(dadosQueueHandler, (void *)&ultimoDadoRecebido, 0);
+    return ultimoDadoRecebido;
   }
-
-  float getTemperatura() { return temperatura; }
-
-  float getUmidade() { return umidade; }
-
 }

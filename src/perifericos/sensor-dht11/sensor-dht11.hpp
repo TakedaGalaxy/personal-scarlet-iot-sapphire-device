@@ -7,13 +7,18 @@
 
 #define DATA_PIN 23
 
+typedef struct
+{
+  float temperatura;
+  float umidade;
+  bool erro;
+} DadosDht11;
+
 namespace sensorDht11
 {
+  // Inicializa DHT11 e inicia task de leitura
   void inicializa();
 
-  // Cria uma task para fazer a leitura dos dados do DHT11
-  void atualizaDados();
-
-  float getTemperatura();
-  float getUmidade();
+  // Realiza a atualização dos dados e retorna
+  DadosDht11 getDados();
 }

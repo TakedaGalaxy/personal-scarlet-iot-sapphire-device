@@ -8,26 +8,27 @@ void testCallback()
 void setup()
 {
   Serial.begin(115200);
+  sensorDht11::inicializa();
 
   // display::inicializa();
-  // sensorDht11::inicializa();
-  // teclado::setCallback(T_ANTERIOR, testCallback);
+  //teclado::setCallback(T_ANTERIOR, testCallback);
 
-  buzzer::inicializa();
-  teclado::inicializa();
-  
+  //buzzer::inicializa();
+  //teclado::inicializa();
+
 }
 
 void loop()
 {
-  if (!digitalRead(TECLA_1_PIN))
-  {
-    buzzer::emiteSom();
-    while (!digitalRead(TECLA_1_PIN))
-      ;
-  }
+  Serial.printf("%.2f - %.2f\n", sensorDht11::getDados().temperatura, sensorDht11::getDados().umidade);
+  
+  // if (!digitalRead(TECLA_1_PIN))
+  // {
+  //   buzzer::emiteSom();
+  //   while (!digitalRead(TECLA_1_PIN))
+  //     ;
+  // }
 
-  // sensorDht11::atualizaDados();
   // teclado::atualizaStatus();
 
   // StatusTecla resOK = teclado::getTeclaSatus(T_OK);

@@ -25,7 +25,7 @@ namespace sensorDht11
         umidade = event.relative_humidity;
 
       // Necessário delay entre as leituras, especificaod pelo datasheet
-      delay(250);
+      vTaskDelay(250);
 
       vTaskDelete(dht11TaskHandle);
     }

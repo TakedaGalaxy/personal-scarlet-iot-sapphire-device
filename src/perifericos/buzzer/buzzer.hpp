@@ -7,14 +7,22 @@
 #define CANAL 0
 #define RESOLUCAO 8
 
+typedef struct
+{
+  int duracao;
+  int repeticoes;
+  int frequencia;
+} Comando;
+
 namespace buzzer
 {
-  // Realzia a configuração do PWM
+  // Realiza a configuração do PWM
+  // Cria task pra emissão sonora
   void inicializa();
 
-  // Configura a frquencia para PWM enviado para o buzzer
-  void setFrequencia(int valor);
-
-  // Dispara uma task no core 0, para realizar o bip do buzzer
-  void disparaBip(int tempoBipMs = 100, int quantidadeBips = 1);
+  // Emite um som de acordo com o comando
+  // Enviando o comando para task
+  // Retorna True se for evniado para queue
+  // Retorna False se não for enviado para queue
+  bool emiteSom(Comando comando = {100, 1, 500});
 }

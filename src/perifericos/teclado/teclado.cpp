@@ -25,7 +25,7 @@ namespace teclado
         {
           estouro++;
           estado = estouro >= 50;
-          delay(1);
+          vTaskDelay(1);
         }
 
         if (estado)

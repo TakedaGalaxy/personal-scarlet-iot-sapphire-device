@@ -4,59 +4,62 @@ namespace buzzer
 {
   namespace
   {
+
+    QueueHandle_t comandoQueuHandler;
+
     TaskHandle_t buzzerTask;
 
-    int frequencia = 500;
-    int quantidadeBips;
-    int tempoBipMs;
-
-    bool inicializado = false;
-
-    void setQuantidadeBips(int valor) { quantidadeBips = valor; }
-
-    void setTempoBip(int valor) { tempoBipMs = valor; }
+    int frequenciaAtual = 500;
 
     void taskBip(void *pvParameters)
     {
-      ledcWrite(CANAL, 125);
 
-      delay(tempoBipMs);
+      Comando comando;
 
-      ledcWrite(CANAL, 0);
+      while (1)
+      {
+        if (xQueueReceive(comandoQueuHandler, (void *)&comando, 0) == pdTRUE)
+        {
 
-      vTaskDelete(buzzerTask);
+          if (comando.frequencia != frequenciaAtual)
+          {
+            frequenciaAtual = comando.frequencia;
+            ledcSetup(CANAL, frequenciaAtual, RESOLUCAO);
+          }
+
+          ledcWrite(CANAL, 125);
+
+          vTaskDelay(comando.duracao >= 1 ? comando.duracao : 1);
+
+          ledcWrite(CANAL, 0);
+
+          continue;
+        }
+      }
     }
   }
 
   void inicializa()
   {
     // Configurando pwm para buzzer
-    ledcSetup(CANAL, frequencia, RESOLUCAO);
+    ledcSetup(CANAL, frequenciaAtual, RESOLUCAO);
     ledcAttachPin(BUZZER_PIN, CANAL);
-    inicializado = true;
+
+    // Canal para comunicação entre uma task e a taskBuzzer
+    comandoQueuHandler = xQueueCreate(1, sizeof(Comando));
+
+    xTaskCreatePinnedToCore(
+        taskBip,
+        "Buzzer",
+        10000,
+        NULL,
+        1,
+        &buzzerTask,
+        1);
   }
 
-  void setFrequencia(int valor)
+  bool emiteSom(Comando comando)
   {
-    frequencia = valor;
-    ledcSetup(CANAL, frequencia, RESOLUCAO);
-  }
-
-  void disparaBip(int tempoBipMs, int quantidadeBips)
-  {
-    if (buzzerTask == NULL || eTaskGetState(buzzerTask) == 4)
-    {
-      setQuantidadeBips(tempoBipMs);
-      setTempoBip(tempoBipMs);
-      //Criar taks para ser processada no core 0
-      xTaskCreatePinnedToCore(
-          taskBip,
-          "buzzer",
-          10000,
-          NULL,
-          1,
-          &buzzerTask,
-          0);
-    }
+    return xQueueSend(comandoQueuHandler, (void *)&comando, 0) == pdTRUE;
   }
 }

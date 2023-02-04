@@ -9,28 +9,34 @@ void setup()
 {
   Serial.begin(115200);
 
-  display::inicializa();
-  sensorDht11::inicializa();
-  buzzer::inicializa();
+  // display::inicializa();
+  // sensorDht11::inicializa();
+  // teclado::setCallback(T_ANTERIOR, testCallback);
 
+  buzzer::inicializa();
   teclado::inicializa();
-  teclado::setCallback(T_ANTERIOR, testCallback);
+  
 }
 
 void loop()
 {
+  if (!digitalRead(TECLA_1_PIN))
+  {
+    buzzer::emiteSom();
+    while (!digitalRead(TECLA_1_PIN))
+      ;
+  }
 
-  // buzzer::disparaBip();
-  // delay(500);
   // sensorDht11::atualizaDados();
-  // Serial.printf("%.2f - %.2f\n",sensorDht11::getTemperatura(), sensorDht11::getUmidade());
+  // teclado::atualizaStatus();
 
-  teclado::atualizaStatus();
+  // StatusTecla resOK = teclado::getTeclaSatus(T_OK);
+  // if (resOK.precionada && !resOK.statusLido)
+  // {
+  //   buzzer::disparaBip();
+  //   Serial.println("Apenas uma vez !");
+  // }
 
-  StatusTecla resOK = teclado::getTeclaSatus(T_OK);
-  if (resOK.precionada && !resOK.statusLido)
-    Serial.println("Apenas uma vez !");
-
-  if (teclado::getTeclaSatus(T_PROXIMO).precionada)
-    Serial.println("Varias vezes lido");
+  // if (teclado::getTeclaSatus(T_PROXIMO).precionada)
+  //   Serial.printf("%.2f - %.2f\n", sensorDht11::getTemperatura(), sensorDht11::getUmidade());
 }

@@ -16,7 +16,7 @@ Criado para ser utilizado no projeto Iot Escarlate, como modelo Ciano.
   > Firmware
 </h2>
   
-Desenvolvido utilizando framework Arduino e plugin PlatformIO no Visual Studio Code.
+Desenvolvido utilizando framework Arduino, plugin PlatformIO no Visual Studio Code e freeRTOS.
   
 <div>
   <a href="https://www.arduino.cc/" target="_blank" title="Arduino">

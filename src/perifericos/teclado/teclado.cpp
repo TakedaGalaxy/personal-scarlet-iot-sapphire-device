@@ -65,6 +65,7 @@ namespace teclado
         }
 
         xQueueSend(teclasPrecionadasQueueHandler, (void *)&statusTeclas, 0);
+        vTaskDelay(1);
       }
     }
 

@@ -40,6 +40,8 @@ namespace display
           renderizaBarraInferior(dadosBarraInferior);
 
         display.display();
+        
+        vTaskDelay(1);
       }
     }
 

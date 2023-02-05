@@ -35,6 +35,7 @@ namespace buzzer
 
           continue;
         }
+        vTaskDelay(1);
       }
     }
   }

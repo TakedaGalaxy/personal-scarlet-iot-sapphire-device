@@ -5,5 +5,7 @@
 #include "./perifericos/buzzer/buzzer.hpp"
 #include "./perifericos/teclado/teclado.hpp"
 
+#include "./wifi/wifi.hpp"
+
 // Led embutido
 #define LED 25

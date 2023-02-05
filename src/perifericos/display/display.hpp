@@ -21,5 +21,6 @@ typedef struct
 namespace display
 {
   void inicializa();
-  void setDadosBarraSuerior(float temperatura, float umidade);
+  void setDadosBarraSuperior(float temperatura, float umidade);
+  void setDadosBarraInferior(char *escrita);
 }

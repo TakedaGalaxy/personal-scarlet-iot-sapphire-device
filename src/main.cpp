@@ -22,7 +22,8 @@ void loop()
 {
 
   DadosDht11 resDht11 = sensorDht11::getDados();
-  display::setDadosBarraSuerior(resDht11.temperatura, resDht11.umidade);
+  display::setDadosBarraSuperior(resDht11.temperatura, resDht11.umidade);
+  display::setDadosBarraInferior("OPA");
 
   StatusTecla resOK = teclado::getTecla(T_OK);
   if (!resOK.statusLido && resOK.precionada)

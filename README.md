@@ -1,5 +1,5 @@
 <h1>
-  Dispositivo Ciano (Projeto IoT Escarlate) (Em Desenvolvimento)
+  Dispositivo safira (Scarlet Iot) (Em Desenvolvimento)
 </h1>
 
 <div>
